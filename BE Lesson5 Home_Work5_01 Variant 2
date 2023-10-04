@@ -1,0 +1,48 @@
+#include <iostream>
+# include <cmath>
+using namespace std;
+
+// Домашнее задание урока 5_01
+// Variant 2
+// С помощью оператора new выделите память указателям на целый  и вещественный тип.
+// Присвойте значения двумя способами и вывидите на экран.
+// Помните про проверку указателя и освобождение памяти.
+
+// English
+// Using the new operator, allocate memory for pointers to an integer and a floating-point type.
+// Assign values in two ways and display them on the screen.
+// Remember to chec
+
+
+int main()
+{
+
+    // For integer'
+    // Allocating memory
+    int *a_celoe = NULL;
+    a_celoe = new int(777);
+
+    //Chekind
+    if (a_celoe)
+    {
+      cout<< *a_celoe << endl;   // Displaying
+      delete a_celoe;             // Freeing memory
+    }
+
+
+    // For float
+    // Allocating memory
+    float *b_float = NULL;
+    b_float = new float(36.6);
+
+    //Chekind
+    if( b_float)
+    {
+        cout<< *b_float << endl;     // Displaying
+        delete  b_float;            // Freeing memory
+    }
+
+
+    cout << " \n The end of the program" << endl;
+    return 0;
+}
