@@ -1,0 +1,72 @@
+#include <iostream>
+using namespace std;
+
+// Домашнее задание урока 5_01
+// С помощью оператора new выделите память указателям на целый  и вещественный тип.
+// Присвойте значения двумя способами и вывидите на экран.
+// Помните про проверку указателя и освобождение памяти.
+
+// English
+// Using the new operator, allocate memory for pointers to an integer and a floating-point type.
+// Assign values in two ways and display them on the screen.
+// Remember to check the pointer and deallocate memory.
+
+
+
+
+int main()
+{
+    // С помощью оператора new выделите память указателям на целый  и вещественный тип.
+    //allocate memory for pointers to an integer and a floating-point type.
+
+    // For integer
+    int *a_celoe = NULL;
+    a_celoe = new int(777);
+
+            // проверка и обработка случая если не удалось выделить память.
+            // check and process the case if memory allocation failed
+            if (a_celoe == nullptr) {
+            // Код выполняется, если a_celoe равен nullptr (не удалось выделить память)
+            cout << "Не удалось выделить память для a_celoe." << endl;
+            return 1; // Возврат из программы с кодом ошибки
+            }
+
+
+
+    // For float
+    float *b_float = NULL;
+    b_float = new float(36.6);
+
+            // check and process the case if memory allocation for b_float failed
+            if (b_float== nullptr) {
+            // Код выполняется, если b_float равен nullptr (не удалось выделить память)
+            cout << "Не удалось выделить память для b_float." << endl;
+            return 1; // Возврат из программы с кодом ошибки
+            }
+
+
+
+    //Вывод на экран.  //Display on the screen.
+
+    //Выводим на экран целое число. //Display an integer number on the screen.
+    //cout << "a_celoe =   "<<a_celoe<< endl;
+    cout << "\n*a_celoe = "<<*a_celoe<< endl;
+    cout << "   "<< endl;
+
+
+    //Выводим на экран вещественное число
+    //Display a real number
+    //cout << "b_float = " <<b_float<< endl;
+    cout << "\n*b_float = " <<*b_float<< endl;
+    cout << "   "<< endl;
+
+
+    //Освобождение памяти
+    //freeing memory
+    delete a_celoe;
+    delete b_float;
+
+    cout << " \n  "<< endl;
+    cout << "  The end of the program" << endl;
+    return 0;
+}
