@@ -1,0 +1,110 @@
+#include <iostream>
+using namespace std;
+
+//5_02
+//Создайте класс с любым количеством публичных полей любого типа.
+//Используйте new для динамического выделения памяти под обьект
+//Заполните поля и отобразите на экране.
+
+//Моя интерпритация - реализация этого задания
+//представим класс - как описание помещений, а обьекты этого класса пусть будут - различные комнаты.
+//Помимо того что научимся обращатся к полю класса, созадим также методы для вычисления площади помещения     void CalculateRoomSquare()
+//и вычисление обьема помещения.  - void CalculateRoomSpace()
+//Да это не входит в задание, но я имею право покреативить.
+
+//Same in English:
+//Create a class with any number of public fields of any type.
+//Use new to dynamically allocate memory for the object
+//Fill the fields and display them on the screen.
+//My interpretation i of this assignment
+//Present the class as a description of rooms, and let the objects of this class be different rooms.
+//Besides learning how to access the class field, let's create methods for calculating the area of the room void CalculateRoomSquare()
+//and calculate the volume of the room.  - void CalculateRoomSpace()
+//Yes, this is not part of the assignment, but I have the right to be creative.
+
+class Room{
+    public:
+
+    //char room_name[20];
+    string room_name;
+    float length;
+    float width;
+    float height;
+
+    int number_of_windows;
+
+    // Void for displaying  parameters
+    void Show_income_parameters()
+    {
+        cout<<"\n\n Room Name -- " << room_name <<endl;
+
+        cout<<" length  = " << length <<" m"<<endl;
+        cout<<" width  = " << width <<" m"<<endl;
+        cout<<" height  = " << height <<" m"<<endl;
+        cout<<" number of windows  = " << number_of_windows <<endl;
+     }
+
+
+    // Void to calculate Room Square and Display it.
+   void CalculateRoomSquare()
+   {
+       float square = length*width;
+       cout<<"\n square = " << square <<" m2"<<endl;
+       //return square;
+   }
+
+
+    // Void to calculate Room Space and Display it.
+   void CalculateRoomSpace()
+   {
+       float space = length * width * height;
+       cout<<"\n Space = " << space <<" m3"<<endl;
+   }
+
+};
+
+int main()
+{
+    Room *zal1 = nullptr;// делаем указатель на обьект и обнуляем  его
+    zal1 = new Room;     // создае обьект зал1
+
+    // Запоняем параметры - поля обьекта
+    zal1->room_name = "Zal 1";
+    zal1->length = 10.5;
+    zal1->width =5;
+    zal1->height = 2.8;
+    zal1->number_of_windows = 4;
+
+    //show parameters to the screen by method:
+    zal1->Show_income_parameters();
+    zal1->CalculateRoomSquare();
+    zal1->CalculateRoomSpace();
+
+
+    // ***
+    // Entering Kithen
+    Room *kithen = nullptr;
+    kithen = new Room;
+
+      // Запоняем параметры - поля обьекта
+    kithen->room_name = "Kithen";
+    kithen->length = 7;
+    kithen->width =3;
+    kithen->height = 2.8;
+    kithen->number_of_windows = 1;
+
+    //show parameters to the screen by method:
+    kithen->Show_income_parameters();
+    kithen->CalculateRoomSquare();
+    kithen->CalculateRoomSpace();
+
+
+    // Clearing of Memory
+    delete zal1;
+    delete kithen;
+
+
+    //Program end inscription
+    cout << "\nHello Room!" << endl;
+    return 0;
+}
