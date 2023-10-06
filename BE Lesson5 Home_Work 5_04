@@ -1,0 +1,34 @@
+#include <iostream>
+#include <cmath>
+#include <ctime>
+
+using namespace std;
+
+// 5_04
+// Создайте динамический массив целых чисел.
+// С помощю генератора случайных чисел  и оператора new задайте длину массива от 3х до 10 елементов.
+// Проинициализируйте элементы (рандомными числами) и выведите на экран. После чего освободите память.
+
+// Create a dynamic array of integers.
+// Using the random number generator and the new operator, set the array length from 3 to 10 elements.
+// Initialize the elements (with random numbers) and display them on the screen. Then release the memory.
+
+int main()
+{
+    srand(time(NULL));
+
+    int len = (rand()%8) + 3;       // Creating randomize length of array mas
+    int *mas = new int [len];       //Create a pointer to the array
+
+    if (mas)                        // if the memory was allocated successfully
+
+    {
+        for(int i=0; i<len; i++)
+        {
+            mas[i] = rand();         // fill the array with random numbers
+            cout << mas[i] <<endl;   // displaying numbers
+        }
+        delete [] mas;               // releasing memory
+    }
+
+}
