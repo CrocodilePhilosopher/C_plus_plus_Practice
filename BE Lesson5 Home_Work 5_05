@@ -1,0 +1,55 @@
+#include <iostream>
+
+using namespace std;
+
+// 5_05
+// Создайте класс хранящий координаты.
+// Добавьте метод инициализации  и метод вывода на экран.
+// Создайте статический массив объектов этого класса.
+// Проинициализируйте  каждый элемент и отобразите на экране.
+
+// Create a class storing coordinates.
+// Add an initialization method and a method for displaying on the screen.
+// Create a static array of objects of this class.
+// Initialize each element and display it on the screen.
+
+class Coordinats
+{
+  int x;
+  int y;
+
+ public:
+
+  // метод инициализации  //initialization method
+   void InitCoords(int _x, int _y)
+   {
+            x=_x;
+            y=_y;
+   }
+
+
+    //метод вывода на экран  // Displaying Method
+    void DisplayCoords()
+    {
+     cout<<" x="<< x<<"; y="<< y<<";"<< endl;
+    }
+};
+
+
+int main()
+{
+    #define len 10
+
+    // Creating Static Array
+   Coordinats a[len];
+
+   for (int i = 0; i<len; i++)
+   {
+       a[i].InitCoords(rand(), rand());
+       a[i]. DisplayCoords();
+   }
+
+
+    cout << "\nHello static Array!" << endl;
+    return 0;
+}
