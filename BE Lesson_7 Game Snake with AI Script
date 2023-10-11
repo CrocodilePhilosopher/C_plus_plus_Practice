@@ -1,0 +1,339 @@
+#include <iostream>
+#include <windows.h>
+#include <cstring>    // модуль для работы со строками  // module for working with strings
+#include <stdio.h>
+//#include <cstdio.h>  //|4|fatal error: cstdio.h: No such file or directory|
+
+using namespace std;
+
+void MoveXY(int x, int y)
+{
+    COORD pos;
+    pos.X = x;
+    pos.Y = y;
+    SetConsoleCursorPosition (GetStdHandle(STD_OUTPUT_HANDLE),pos);
+}
+
+// Структура для работы с картой.
+//Structure for working with the map.
+#define mWidth 80       // Размер консольного окна в символах.
+#define mHeight 25
+
+//Класс карты
+//Map class
+struct TMap{
+    char map1[mHeight][mWidth+1];
+    void Clear();
+    void Show();
+    bool IsFreeCell(int x,int y);  // Проверка, свободна ли клетка карты можно ли на нее переместится
+
+    bool CellInMap(int x,int y);   // Проверка  находится ли клетка в пределах карты.
+
+};
+
+// Направления Движения
+// Moving Directions
+enum TDirection {dirLeft, dirRight, dirUp, dirDown};
+
+enum TResult {reOk, reKill};
+//TResult - тип результата для функции управления змейкой.
+//Состояния змейки: reOk - все хорошо, змейка жива
+//reKill - Змейка погибла
+
+#define sLen 1000  // sLen - max. lenght of Snakes tail
+
+class TSnake {
+    int x,y;            // Положние головы змейки
+    TMap *mp;           //*mp - карта на которой будем рисовать змейку
+    TDirection dir;     //dir-Текущее направение движения змейки
+    POINT tail[sLen];   // tail - Массив с координатами каждого элемента хвоста
+    int len;            // текущая длинна хвоста
+    int score;          //подсчет очков
+    POINT OutTextPos;
+
+
+public:
+    void AddTail(int _x, int _y);    // метод добавляет 1 елемент к хвосту змейки.
+    void MoveTail(int _x, int _y);  // метод предвигает хвост змейки
+    void AddTailCnt(int _x, int _y,int cnt);
+
+    TSnake(TMap *_mp, int outX, int outY);     // конструктор,  которому мы предаем карту, на котрой нужно рисовать Змейку
+
+    //Метод инициализации устанавливает начальное положение и направление З
+    void Init(int _x,int _y, TDirection _dir);
+    void PutOnMap();  // Этот методпомещает змейку на карту.
+    // Метод управлния движением змейки
+    TResult UserControl(char w, char s, char a, char d, bool ii);
+
+    // AI Control of moving Snake
+    TResult IIControl();
+    TResult Move();
+    void IncScore();
+
+};
+
+void TSnake :: IncScore()
+{
+    score++;
+}
+
+
+
+void TSnake::AddTailCnt(int _x, int _y,int cnt)
+ {
+     for (int i =0; i<cnt; i++)
+            AddTail(_x, _y);
+ }
+
+
+void TSnake::MoveTail(int _x, int _y)
+{
+    for (int i = len - 1; i>=0; i--)
+        tail[i+1] = tail[i];
+    tail[0].x = _x;
+    tail[0].y = _y;
+}
+
+void TSnake::AddTail(int _x, int _y)
+{
+    MoveTail(_x, _y);
+    len++;
+    if (len>=sLen) len = sLen-1;
+}
+TResult TSnake:: Move()
+{
+    POINT old;   // old - позиция голвы до перемещения
+    old.y = y;   // именно туда будем добавлять новыйэлемент хвоста
+    old.x = x;
+
+    if (dir == dirLeft) x--;
+    if (dir == dirRight) x++;
+    if (dir == dirUp) y--;
+    if (dir == dirDown) y++;
+
+
+    // Проверка условия на свободность клетки.
+    // если клетка не свободна - змейка погибла.
+    if(!mp-> IsFreeCell(x, y) )
+        return reKill;
+
+
+   // Условие удлинения хвоста
+    if (mp-> map1[y][x] == '*')
+        AddTailCnt(old.x,old.y,5);
+    else
+    MoveTail(old.x,old.y);
+
+    return reOk;
+
+}
+
+// "Искуственный интеллект" - контроль движеня змейки.
+TResult TSnake:: IIControl()
+{
+    //Поиск яблока змейкой
+    //Script to Find Apple * by Snake
+
+        // for direction in Horizontal
+    if((dir==dirLeft)||(dir==dirRight))
+    {
+        int i;
+        for (i=0; i< mHeight; i++)
+            if(mp->map1[i][x] == '*')
+                break;
+        if (i< mHeight)
+            dir = (i<y)? dirUp: dirDown;
+    }
+
+
+        // for direction by Verticall
+    if((dir==dirUp)||(dir==dirDown))
+    {
+        int i;
+        for (i=0; i< mWidth; i++)
+            if(mp->map1[y][i] == '*')
+                break;
+        if (i< mWidth)
+            dir = (i<x)? dirLeft : dirRight;
+    }
+
+
+
+
+    // Поиск направления движения и свободной клетки
+    // Finding direction and free cell by Snake
+    POINT pos = {x,y};
+
+    if (dir == dirLeft) pos.x--;
+    if (dir == dirRight) pos.x++;
+    if (dir == dirUp) pos.y--;
+    if (dir == dirDown) pos.y++;
+
+    // Если клетка с коорд Х и У не свободна
+    if (!mp->IsFreeCell(pos.x, pos.y) )
+    {
+        // то в сслучае движения Вниз или ВВерх
+            //Сперва проверяем клетку слева, если она свободна идем в нее(Влево)
+            // Если нет - идем на право.
+
+        if ((dir == dirDown)||(dir == dirUp))
+            dir = mp -> IsFreeCell(x-1,y) ? dirLeft : dirRight;
+
+
+        else if ((dir == dirLeft)||(dir == dirRight))
+            dir = mp -> IsFreeCell(x,y-1) ? dirUp : dirDown;
+
+    }
+
+    return Move();
+}
+
+
+TResult TSnake:: UserControl(char w, char s, char a, char d, bool ii)
+//  if parameter bool ii -is true - Snake  are controlled by AI, not by user.
+{
+    //  if parameter bool ii -is true - Snake  are controlled by AI, not by user.
+    if (ii)
+        return IIControl();
+
+    // else - Snake are controlled by User
+    else
+    {
+        if(GetKeyState(w)<0) dir = dirUp;
+        if(GetKeyState(s)<0) dir = dirDown;
+        if(GetKeyState(a)<0) dir = dirLeft;
+        if(GetKeyState(d)<0) dir = dirRight;
+        return Move();
+    }
+
+
+}
+
+
+
+// Метод инициализации - передаем начальноеположение и направление
+void TSnake:: Init(int _x, int _y, TDirection _dir)
+{
+    x= _x;
+    y= _y;
+    dir = _dir;     //   направлние движения
+    len = 0;        //  длинна хвоста
+}
+
+// Помещаем Змейку на карту символ @ - голова змейки
+void TSnake::PutOnMap()
+{
+          // Вывод очков на экран
+    char str[10];
+    sprintf(str, "%d", score);
+    for (int i =0; i < strlen(str); i++)
+        mp-> map1[OutTextPos.y][OutTextPos.x+i] = str[i];
+
+    // Рисуем Змейку, Голову@ и хвост
+    mp->map1[y][x] = '@';
+    for (int i=0; i< len; i++)
+        mp->map1[tail[i].y][tail[i].x] = '+';
+
+
+
+}
+
+TSnake ::TSnake(TMap *_mp, int outX, int outY)  //Consructor
+{
+    mp=_mp;                 //Обозначаем карту на котрой будем рисовать Змейку
+    Init(0,0,dirRight);     // Проводим базовую иициализацию
+
+    // Подсчет очков
+    score = 0;
+    OutTextPos.x = outX;
+    OutTextPos.y = outY;
+}
+
+//Проверка, что ячейка находится внутри карты.
+bool TMap:: CellInMap(int x, int y)
+{
+    return(x >=0)&&(x<mWidth)&&(y>=0)&&(y<mHeight);
+}
+
+//Проверка что клтка внутри карты  и в клетке нет ни головы @, ни элемента хвоста змейки +
+bool TMap::IsFreeCell(int x, int y)
+{
+    if (!CellInMap (x,y))return false;  // если проверка на нахождение клетке в карте не ложное. Бля, п
+    return (map1[y][x] != '@') && (map1[y][x] != '+');
+}
+
+// строку                           if!CellInMap (x,y)return false;
+//можно было легко заменить на      if CellInMap (x,y)return true;
+// это бы улучшило читаемость и понятность кода, а функционал - один и тотже !
+// Чат ГПТ в этом со мной согласился!
+
+void TMap::Show()
+{
+    MoveXY(0,0);
+    map1[mHeight-1][mWidth-1] = '\0';
+    for (int j = 0; j < mHeight; j++)
+        cout << map1[j];
+}
+
+void TMap::Clear()
+{
+    for (int i = 0; i< mWidth; i++) // Заполняем нулевую строку пробелами
+        map1[0][i]= ' ';            //
+    map1[0][mWidth] = '\0';         // Конец нулевой строки заполняем символом конца строки
+
+    for (int j=1; j< mHeight; j++)         //Копируем нулевую строку
+        strncpy(map1[j], map1[0], mWidth+1); //На всю остальную высоту каоты.
+
+//Это яблоки на карте, которые должна съесть змейка что бы вырасти.
+    map1[12][20] = '*';
+    map1[12][60] = '*';
+    map1[5][40] = '*';
+    map1[20][40] = '*';
+}
+
+
+
+
+int main()
+{
+    int userCnt = 2;
+    TMap map1;
+    TSnake snake1(&map1, 3, 1);       // В конструктор мы пердаем указатель на карту
+    snake1.Init(10,5,dirRight); // Задаем начальное положение и направление Змейки
+
+    TSnake snake2(&map1, 77, 1);
+    snake2.Init(70,5,dirLeft);
+    // snake1.AddTail(3,3); // Test code
+    //snake1.AddTail(3,4);  // Test code
+    //snake1.AddTail(3,5);
+
+    do
+    {
+        bool kill1 = snake1.UserControl ('W','S','A','D', true) == reKill;
+        if ( (kill1)
+           ||( (userCnt>=2)
+              && (snake2.UserControl(VK_UP,VK_DOWN,VK_LEFT,VK_RIGHT, false) == reKill))
+            )
+       {
+            snake1.Init(10,5,dirRight);
+            snake2.Init(70,5,dirLeft);
+            if (kill1)
+                snake2.IncScore();
+            else
+                snake1.IncScore();
+
+       }
+
+        map1.Clear();
+        snake1.PutOnMap();
+        if (userCnt>=2) snake2.PutOnMap();
+        map1.Show();
+        Sleep(80);
+    }
+    while (GetKeyState(VK_ESCAPE)>=0);
+
+
+
+    cout << "Hello world!" << endl;
+    return 0;
+}
