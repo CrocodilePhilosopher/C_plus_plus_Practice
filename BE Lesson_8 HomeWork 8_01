@@ -1,0 +1,38 @@
+#include <iostream>
+#include <locale.h>
+using namespace std;
+
+// Home work 8_01
+//Попросите пользователя ввести координату Х, а затем координату У.
+//После ввода отобрзите значения координат на экране.
+
+
+int main()
+{
+    setlocale (LC_ALL, "Russian");
+
+    float x, y;
+    cout << "Enter target coordinates|| Введите координаты цели " << endl;
+    cout << "\nEnter coordinate Х || Введите координату Х: " << endl;
+    cin >> x;
+
+    //check the input stream for errors
+    if (cin.fail())
+        cin.clear();            //and if there are clear the error flags.
+    cin.ignore(1000,'\n');      // ignoring  other symbols after number, except \n line feed
+
+
+    cout << "\nEnter coordinate Y || Введите координату Y: " << endl;
+    cin >>y;
+
+    //check the input stream for errors
+    if (cin.fail())
+        cin.clear();            //and if there are clear the error flags.
+
+    cout << "\nYou had entered coordinates: " << endl;
+    cout << " coordinate X: "<< x << endl;
+    cout << " coordinate Y: "<< y << endl;
+
+
+    return 0;
+}
