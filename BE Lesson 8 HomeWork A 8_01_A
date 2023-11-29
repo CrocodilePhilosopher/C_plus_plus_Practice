@@ -1,0 +1,25 @@
+#include <iostream>
+
+using namespace std;
+
+// Procedure for input "Input"
+void Input(char *c, float *f)
+{
+    cout << "input "<< c << ": ";
+    cin >> *f;
+
+}
+
+
+int main()
+{
+    float x,y;
+
+    // Calling procedure "Input" for Inputing  X and Y or other
+    Input("X", &x);
+    Input ("Y", &y);
+
+    //Output into screen
+    cout <<"X: "<< x << "  " <<"Y: "<< y << endl;
+    return 0;
+}
