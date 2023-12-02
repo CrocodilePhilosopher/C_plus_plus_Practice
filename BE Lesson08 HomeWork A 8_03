@@ -1,0 +1,44 @@
+#include <iostream>
+
+using namespace std;
+
+// Задание 3
+//Реализуйте ввод с клавиатуры двух строк по 10 символов.
+//Если строка слишком длинная, то попросить ввести еще раз.
+
+// Procedure for input "Input"
+void Input(char *c, char *str, int cnt)
+{
+    while(1)
+    {
+        cout << "input "<< c << ": ";
+        cin.getline(str, cnt);
+
+
+        // if input fail, we are asking to input correct data
+        if (cin.fail())
+        {
+            cout<< "error! string must be less then 10 chars \n";
+            cin.clear();
+            cin.ignore(1000, '\n');
+        }
+
+        // if input is ok
+        else
+            break;
+    }
+}
+
+
+int main()
+{
+    char x[10], y[10];
+
+    // Calling procedure "Input" for Inputing  X and Y or other
+    Input("str A", x, 10);
+    Input ("str B", y, 10);
+
+    //Output into screen
+    cout <<"X: "<< x << "  " <<"Y: "<< y << endl;
+    return 0;
+}
