@@ -1,0 +1,48 @@
+#include <iostream>
+
+using namespace std;
+
+// Задание 1
+// Попросите пользователя ввести координату Х а затем координату У.
+// После ввода отобразите значения координат на экране.
+
+
+// Задание 2
+//Если в задании 1 при вводе числа был обнаружен недопустимый символ,
+//то попросите пользователя ввести эту же координату еще раз.
+
+// Procedure for input "Input"
+void Input(char *c, float *f)
+{
+    while(1)
+    {
+        cout << "input "<< c << ": ";
+        cin >> *f;
+
+        // if input fail, we are asking to input correct data
+        if (cin.fail() || cin.get()!='\n')
+        {
+            cout<< "error! try again. \n";
+            cin.clear();
+            cin.ignore(1000, '\n');
+        }
+
+        // if input is ok
+        else
+            break;
+    }
+}
+
+
+int main()
+{
+    float x,y;
+
+    // Calling procedure "Input" for Inputing  X and Y or other
+    Input("X", &x);
+    Input ("Y", &y);
+
+    //Output into screen
+    cout <<"X: "<< x << "  " <<"Y: "<< y << endl;
+    return 0;
+}
