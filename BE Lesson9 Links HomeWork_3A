@@ -1,0 +1,43 @@
+#include <iostream>
+using namespace std;
+
+//3.
+// Создайте структуру  point с двумя полями целого типа.
+// Создайте и проинициализируйте переменную рр  типа point.
+// Напишите функцию, которая получает на вход целое число.
+// Если чисто =0, то фукция  возвращает ссылку на первое поле переменной рр.
+// Иначе функция возвращает  ссылку на второе поле.
+// Протестируйте работу функции.
+
+// Creating structure point
+struct point
+{
+    int x,y;
+};
+
+// Creating variable pp of type 'point'.
+point pp = {111, 222};
+
+//function whch gives first field, in a case of getting zero on its enter.
+int &getXY(int i)
+{
+    if (i == 0) return pp.x;
+    else        return pp.y;
+}
+
+
+
+
+int main()
+{
+
+    cout <<"Before function getXY: " <<pp.x << "  " << pp.y << endl;
+
+    getXY(0) = 123;
+    getXY(1) = 567;
+    getXY(2) = 777;
+
+    cout <<"After function getXY: " << pp.x << "  " << pp.y << endl;
+
+    return 0;
+}
