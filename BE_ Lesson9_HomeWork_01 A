@@ -1,0 +1,29 @@
+#include <iostream>
+using namespace std;
+
+//HomeWork Lesson9 A
+// 1. Создайте переменные вещественного и символьгого типа.
+// Одну из переменных сделайте глобальной.
+// С помощю ссылок измените их значения.
+// Отобразите переменные  на экране по имени и по ссылке.
+
+float f = 3.5;
+
+int main()
+{
+    char c = 'A';
+    char &lc = c;   // creating reference on c
+    lc = 'B';       // Changing c with a help of reference(link)
+
+    float  &lf = f;  // Creating link for global f
+    lf = 3.14;       // changing global variable f with a help of link.
+
+    // Displaying  variable c by name  and by reference
+    cout << c << "   " << lc << endl;
+
+    // Displaying  variable f by name  and by reference
+    cout << f << "   " << lf << endl;
+
+    cout << "Hello world!" << endl;
+    return 0;
+}
