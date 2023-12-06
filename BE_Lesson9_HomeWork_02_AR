@@ -1,0 +1,28 @@
+#include <iostream>
+using namespace std;
+
+//2.
+//  Создайте процедуру, имеющую 2 входных параметра  в виде ссылок на вещественный тип.
+// Процедура должна менять местами значения входных переменных.
+// Протестируйте созданную процедуру.
+
+void SwapVal(double &a, double &b)
+{
+    double temproary =a;
+    a=b;
+    b= temproary;
+}
+
+
+
+int main()
+{
+    double x=5.5, y=1.23;
+
+    cout << "Before Swaping: " << x << " " << y << endl;
+    SwapVal(x,y);
+    cout << "After  Swaping: " << x << " " << y << endl;
+
+    cout << "\nHello Links!" << endl;
+    return 0;
+}
